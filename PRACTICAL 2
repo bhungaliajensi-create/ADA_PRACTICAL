@@ -1,0 +1,44 @@
+public class BubbleSortPractical {
+
+    public static void bubbleSort(int[] arr) {
+        int n = arr.length;
+
+        for (int i = 0; i < n - 1; i++) {
+            boolean swapped = false;
+
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+
+            if (!swapped)
+                break;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int n = 15000;
+        int[] arr = new int[n];
+        Random rand = new Random();
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = rand.nextInt(100000);
+        }
+
+        long startTime = System.nanoTime();
+
+        bubbleSort(arr);
+
+        long endTime = System.nanoTime();
+
+        long timeTaken = endTime - startTime;
+
+        System.out.println("Number of elements: " + n);
+        System.out.println("Execution Time: " + timeTaken + " nanoseconds");
+    }
+}
