@@ -1,0 +1,63 @@
+import java.util.Random;
+
+public class PrimsRandom {
+
+    public static void primMST(int[][] graph, int V) {
+        int[] key = new int[V];
+        boolean[] visited = new boolean[V];
+
+        for (int i = 0; i < V; i++) {
+            key[i] = Integer.MAX_VALUE;
+            visited[i] = false;
+        }
+
+        key[0] = 0;
+        int total = 0;
+
+        for (int i = 0; i < V; i++) {
+            int u = -1;
+
+            for (int j = 0; j < V; j++) {
+                if (!visited[j] && (u == -1 || key[j] < key[u])) {
+                    u = j;
+                }
+            }
+
+            visited[u] = true;
+            total += key[u];
+
+            for (int v = 0; v < V; v++) {
+                if (graph[u][v] != 0 && !visited[v] && graph[u][v] < key[v]) {
+                    key[v] = graph[u][v];
+                }
+            }
+        }
+
+        System.out.println("Total cost of MST: " + total);
+    }
+
+    public static void main(String[] args) {
+
+        int V = 5;
+        int[][] graph = new int[V][V];
+        Random rand = new Random();
+
+        for (int i = 0; i < V; i++) {
+            for (int j = i + 1; j < V; j++) {
+                int weight = rand.nextInt(10) + 1;
+                graph[i][j] = weight;
+                graph[j][i] = weight;
+            }
+        }
+
+        System.out.println("Generated Graph:");
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                System.out.print(graph[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        primMST(graph, V);
+    }
+}
