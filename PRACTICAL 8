@@ -1,0 +1,83 @@
+import java.util.*;
+
+class Edge implements Comparable<Edge> {
+    int u, v, w;
+
+    public int compareTo(Edge e) {
+        return this.w - e.w;
+    }
+}
+
+public class KruskalRandom {
+
+    static int find(int parent[], int i) {
+        if (parent[i] == i)
+            return i;
+        return parent[i] = find(parent, parent[i]);
+    }
+
+    static void union(int parent[], int rank[], int x, int y) {
+        if (rank[x] < rank[y])
+            parent[x] = y;
+        else if (rank[x] > rank[y])
+            parent[y] = x;
+        else {
+            parent[y] = x;
+            rank[x]++;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        int V = 5;
+        int E = 7;
+        Random rand = new Random();
+
+        Edge[] edges = new Edge[E];
+
+        for (int i = 0; i < E; i++) {
+            edges[i] = new Edge();
+            edges[i].u = rand.nextInt(V);
+            edges[i].v = rand.nextInt(V);
+
+            while (edges[i].u == edges[i].v) {
+                edges[i].v = rand.nextInt(V);
+            }
+
+            edges[i].w = rand.nextInt(10) + 1;
+        }
+
+        System.out.println("Generated Edges:");
+        for (int i = 0; i < E; i++) {
+            System.out.println(edges[i].u + " - " + edges[i].v + " : " + edges[i].w);
+        }
+
+        Arrays.sort(edges);
+
+        int[] parent = new int[V];
+        int[] rank = new int[V];
+
+        for (int i = 0; i < V; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+
+        int total = 0, count = 0;
+
+        for (int i = 0; i < E && count < V - 1; i++) {
+            int u = edges[i].u;
+            int v = edges[i].v;
+
+            int x = find(parent, u);
+            int y = find(parent, v);
+
+            if (x != y) {
+                total += edges[i].w;
+                union(parent, rank, x, y);
+                count++;
+            }
+        }
+
+        System.out.println("Total cost of MST: " + total);
+    }
+}
